@@ -7,24 +7,6 @@
 
 #import "ViewController.h"
 
-typedef NS_ENUM(int, FontColor) {
-  Blue,
-  Brown,
-  Cyan,
-  Green,
-  Indigo,
-  Mint,
-  Orange,
-  Pink,
-  Purple,
-  Red,
-  Teal,
-  Yellow,
-  Gray,
-  Black,
-  White
-};
-
 @interface ViewController ()
 
 @end
@@ -33,27 +15,49 @@ typedef NS_ENUM(int, FontColor) {
 
 - (void)viewDidLoad {
   [super viewDidLoad];
-  // Do any additional setup after loading the view.
+  _textField.delegate = self;
 }
 
 - (IBAction)textEditingChanged: (UITextField *)sender {
-  NSArray *words = [[sender text] componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+  NSString *text = [sender text];
+  NSArray *words = [text componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+  NSMutableArray *charArr = [NSMutableArray new];
+  for (int i = 0; i < [text length]; i++) {
+    [charArr addObject:[NSString stringWithFormat:@"%c", [text characterAtIndex:i]]];
+  }
   
   for (NSString *word in words) {
     NSLog(@"%@", word);
     
     NSRegularExpression *colorRegex = [NSRegularExpression regularExpressionWithPattern:@"^(blue|brown|cyan|green|indigo|mint|orange|pink|purple|red|teal|yellow|gray|black|white)$" options:NSRegularExpressionCaseInsensitive error:nil];
     
-    if ([colorRegex numberOfMatchesInString:word options:0 range:NSMakeRange(0, [word length])] >= 1) {
-      NSString *lowercased = [word lowercaseString];
-      NSDictionary *attributes = [[NSDictionary alloc] initWithObjectsAndKeys:NSForegroundColorAttributeName, [UIColor colorNamed:word], nil];
-      NSAttributedString *newString = [[NSAttributedString alloc] initWithString:word attributes:attributes];
-      
-      [sender shouldChangeTextInRange:<#(nonnull UITextRange *)#> replacementText:<#(nonnull NSString *)#>]
-    }
+    NSUInteger loc = [charArr count] - 1 - [word length];
+    NSUInteger len = [word length];
+//    if ([self textField:sender shouldChangeCharactersInRange:NSMakeRange(loc, len) replacementString:word]) {
+//      NSString *lowercased = [word lowercaseString];
+////      NSDictionary *attributes = [[NSDictionary alloc] initWithObjectsAndKeys:NSForegroundColorAttributeName, [UIColor colorNamed:lowercased], nil];
+////      NSAttributedString *newString = [[NSAttributedString alloc] initWithString:word attributes:attributes];
+////      NSUInteger loc = [charArr count] - 1 - [word length];
+////      NSUInteger len = [word length];
+//      [sender setTextColor:[UIColor colorNamed:lowercased]];
+//      UITextPosition *lastChar = [sender endOfDocument];
+//      UITextPosition *startOfLastWord = [sender positionFromPosition:lastChar offset:[word length]];
+//      UITextRange *textRange = [sender textRangeFromPosition:startOfLastWord toPosition:lastChar];
+//      [self textField:sender shouldChangeCharactersInRange:NSMakeRange(loc, len) replacementString:word];
+//    }
   }
 }
 
-//- (UIColor *)getTextColor: ()
+- (BOOL)textField: (UITextField *)textField shouldChangeCharactersInRange: (NSRange)range replacementString: (NSString *)string {
+//  NSRegularExpression *colorRegex = [NSRegularExpression regularExpressionWithPattern:@"^(blue|brown|cyan|green|indigo|mint|orange|pink|purple|red|teal|yellow|gray|black|white)$" options:NSRegularExpressionCaseInsensitive error:nil];
+//
+//  if ([colorRegex numberOfMatchesInString:string options:0 range:NSMakeRange(0, [string length])] >= 1) {
+//    return YES;
+//  }
+//  return NO;
+  return YES;
+}
+
+
 
 @end
